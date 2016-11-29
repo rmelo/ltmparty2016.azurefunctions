@@ -19,12 +19,16 @@ module.exports = function (context, req) {
 
         var entrant = { name: req.body.name, email: req.body.email, birthdate: req.body.birthdate };
         var key = entrant.email.split('.').join('_');
+
+        context.log('Adding entrant!');
+
         var a = firebase.database().ref('entrants/' + key).set(entrant).then(function () {
             context.done();
         }).catch(function () {
+            context.log('Erro in firebase:');
             res = {
                 status: 400,
-                body: JSON.stringify(arguments[0])
+                body: JSON.stringify(arguments)
             };
             context.done(null, res);
         });
