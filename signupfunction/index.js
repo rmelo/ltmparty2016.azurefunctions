@@ -25,7 +25,7 @@ module.exports = function (context, req) {
         var a = firebase.database().ref('entrants/' + key).set(entrant).then(function () {
             context.done();
         }).catch(function () {
-            context.log('Erro in firebase:');
+            context.log('Erro in firebase on entrants:');
             res = {
                 status: 400,
                 body: JSON.stringify(arguments)
