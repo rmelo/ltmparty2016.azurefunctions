@@ -37,7 +37,7 @@ module.exports = function(context, req) {
 
                 firebase.database().ref('entrants/' + key).set(entrant)
                     .then(function(result) {
-                        context.done({body:entrant});
+                        context.done(null, {body:entrant});
                     })
                     .catch(function(error) {
                         res = {
