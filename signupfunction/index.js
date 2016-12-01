@@ -29,25 +29,17 @@ module.exports = function(context, req) {
         var entrant = { name: req.body.name, email: req.body.email, code: getCode() };
         var key = entrant.email.split('.').join('_');
         
-        context.log('AAA');
-
         firebase.database().ref('entrants/' + key).once('value')
             .then(function(snapshot) {
-                
-                context.log('A');
 
                 var data = snapshot.val();
                 entrant.code = data ? data.code : entrant.code;
 
-                context.log('B');
-
                 firebase.database().ref('entrants/' + key).set(entrant)
-                    .then(function() {
-                        context.log('C');
-                        context.done();
+                    .then(function(result) {
+                        context.done({entrant});
                     })
                     .catch(function(error) {
-                        context.log('D');
                         res = {
                             status: 400,
                             body: JSON.stringify(arguments)
