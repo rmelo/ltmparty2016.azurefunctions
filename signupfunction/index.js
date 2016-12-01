@@ -32,16 +32,20 @@ module.exports = function(context, req) {
         firebase.database().ref('entrants/' + key).once('value')
             .then(function(snapshot) {
                 
+                context.log('A');
+
                 var data = snapshot.val();
                 entrant.code = data ? data.code : entrant.code;
 
+                context.log('B');
 
                 firebase.database().ref('entrants/' + key).set(entrant)
                     .then(function() {
+                        context.log('C');
                         context.done();
                     })
                     .catch(function(error) {
-                        console.log(error);
+                        context.log('D');
                         res = {
                             status: 400,
                             body: JSON.stringify(arguments)
