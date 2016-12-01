@@ -16,7 +16,7 @@ function getCode() {
     return code + genId().generate();
 }
 
-module.exports = function (context, req) {
+module.exports = function(context, req) {
 
     var result = validate(context, req);
 
@@ -30,15 +30,17 @@ module.exports = function (context, req) {
         var key = entrant.email.split('.').join('_');
 
         firebase.database().ref('entrants/' + key).once('value')
-            .then(function (snapshot) {
-                var code = snapshot.val().code;
-                if (code) entrant.code = code;
+            .then(function(snapshot) {
+                
+                var data = snapshot.val();
+                entrant.code = data ? data.code : entrant.code;
+
 
                 firebase.database().ref('entrants/' + key).set(entrant)
-                    .then(function () {
+                    .then(function() {
                         context.done();
                     })
-                    .catch(function (error) {
+                    .catch(function(error) {
                         console.log(error);
                         res = {
                             status: 400,
@@ -59,12 +61,12 @@ module.exports = function (context, req) {
 };
 
 
-var validate = function (context, req) {
-    
+var validate = function(context, req) {
+
     if (!req.body.name) {
         return { message: 'Você deve informar o seu nome completo.', success: false };
     }
-    
+
     if (!req.body.email) {
         return { message: 'Você deve informar o seu e-mail.', success: false };
     } else if (!validator.isEmail(req.body.email)) {
