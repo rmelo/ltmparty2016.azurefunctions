@@ -28,6 +28,8 @@ module.exports = function(context, req) {
 
         var entrant = { name: req.body.name, email: req.body.email, code: getCode() };
         var key = entrant.email.split('.').join('_');
+        
+        context.log('AAA');
 
         firebase.database().ref('entrants/' + key).once('value')
             .then(function(snapshot) {
