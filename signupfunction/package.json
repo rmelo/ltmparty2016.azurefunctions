@@ -12,6 +12,7 @@
     "colors": "^1.1.2",
     "dotenv": "^2.0.0",
     "firebase": "^3.6.1",
+    "gen-id": "^0.1.1",
     "validator": "^6.1.0"
   }
 }
