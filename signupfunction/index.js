@@ -22,13 +22,10 @@ module.exports = function(context, req) {
 
     if (result.success) {
 
-        if (firebase.apps.length === 0) {
+        if (firebase.apps.length === 0)
             firebase.initializeApp(config);
-        }
 
         var entrant = { name: req.body.name, email: req.body.email, code: getCode() };
-        if(req.body.award)
-            entrant.award = req.body.award;
             
         var key = entrant.email.split('.').join('_');
         
@@ -36,7 +33,7 @@ module.exports = function(context, req) {
             .then(function(snapshot) {
 
                 var data = snapshot.val();
-                entrant.code = data ? data.code : entrant.code;
+                if(data) entrant = data;
 
                 firebase.database().ref('entrants/' + key).set(entrant)
                     .then(function(result) {
