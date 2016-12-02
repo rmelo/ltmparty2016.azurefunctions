@@ -27,6 +27,9 @@ module.exports = function(context, req) {
         }
 
         var entrant = { name: req.body.name, email: req.body.email, code: getCode() };
+        if(req.body.award)
+            entrant.award = req.body.award;
+            
         var key = entrant.email.split('.').join('_');
         
         firebase.database().ref('entrants/' + key).once('value')

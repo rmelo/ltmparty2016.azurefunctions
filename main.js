@@ -3,9 +3,13 @@ var signup = require('./signupfunction/index.js');
 
 
 var entrant = {
-    name:'Rodrigo Melo',
-    email:'rdg.melo@gmail.com'
+    name:'Rodrigo Pereira de Melo',
+    email:'rdg.melo@gmail.com',
+    code:'123'
 };
+entrant.award = {
+    title:'Viagem para Miami'
+}
 // var entrant = {
 //     name:'Morimar Moura',
 //     email:'mmoura@grupoltm.com.br'
