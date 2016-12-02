@@ -16,7 +16,15 @@ function getCode() {
     return code + genId().generate();
 }
 
-module.exports = function(context, req) {
+function fail(context, error) {
+    var res = {
+        status: 400,
+        body: JSON.stringify(error)
+    };
+    context.done(null, res);
+}
+
+module.exports = function (context, req) {
 
     var result = validate(context, req);
 
@@ -26,40 +34,35 @@ module.exports = function(context, req) {
             firebase.initializeApp(config);
 
         var entrant = { name: req.body.name, email: req.body.email, code: getCode() };
-            
+
         var key = entrant.email.split('.').join('_');
-        
+
         firebase.database().ref('entrants/' + key).once('value')
-            .then(function(snapshot) {
+            .then(function (snapshot) {
 
                 var data = snapshot.val();
-                if(data) entrant = data;
+                if (data) entrant = data;
 
                 firebase.database().ref('entrants/' + key).set(entrant)
-                    .then(function(result) {
-                        context.done(null, {body:entrant});
+                    .then(function (result) {
+                        context.done(null, { body: entrant });
                     })
-                    .catch(function(error) {
-                        res = {
-                            status: 400,
-                            body: JSON.stringify(arguments)
-                        };
-                        context.done(null, res);
+                    .catch(function (error) {
+                        fail(context, error);
                     });
+            })
+            .catch(function (error) {
+                fail(context, error);
             });
 
 
     } else {
-        res = {
-            status: 400,
-            body: result.message
-        };
-        context.done(null, res);
+        fail(context, result.message);
     }
 };
 
 
-var validate = function(context, req) {
+var validate = function (context, req) {
 
     if (!req.body.name) {
         return { message: 'Você deve informar o seu nome completo.', success: false };

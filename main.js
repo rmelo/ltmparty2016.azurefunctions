@@ -16,5 +16,5 @@ var entrant = {
 // };
 azure.req.body = entrant;
 
-// signup(azure.context, azure.req);
-raffle(azure.context);
+signup(azure.context, azure.req);
+//raffle(azure.context);
